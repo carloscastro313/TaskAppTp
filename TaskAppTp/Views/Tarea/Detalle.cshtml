@@ -1,0 +1,48 @@
+﻿@model TaskAppTp.Models.Tarea
+
+@{
+    ViewData["Title"] = "Detalle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalle</h1>
+
+<div>
+    <h4>Tarea</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Completo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Completo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdCarpeta)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdCarpeta)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" asp-controller="Tarea" asp-route-id="@Model.IdCarpeta">Back to List</a>
+</div>

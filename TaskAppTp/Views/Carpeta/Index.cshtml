@@ -1,0 +1,44 @@
+﻿@model IEnumerable<TaskAppTp.Models.Carpeta>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Crear">Crear nueva carpeta de tareas</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Nombre
+            </th>
+            <th>
+                Cantidad de tareas
+            </th>
+            <th>
+                Acciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Nombre
+            </td>
+            <td>
+                @item.CantidadTareas
+            </td>
+            <td class="text-center">
+                <a class="btn btn-success" asp-action="Index" asp-controller="Tarea" asp-route-id="@item.Id">Ver tareas</a>
+                <a class="btn btn-warning" asp-action="Modificar" asp-route-id="@item.Id" asp-controller="Carpeta">Modificar</a>
+                <a class="btn btn-danger" asp-action="Eliminar" asp-route-id="@item.Id" asp-controller="Carpeta">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

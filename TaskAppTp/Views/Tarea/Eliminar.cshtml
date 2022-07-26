@@ -1,0 +1,52 @@
+﻿@model TaskAppTp.Models.Tarea
+
+@{
+    ViewData["Title"] = "Eliminar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Eliminar</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Tarea</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Completo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Completo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdCarpeta)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdCarpeta)
+        </dd>
+    </dl>
+    
+    <form asp-action="EliminarTarea" asp-controller="Tarea" method="post">
+        <input asp-for="Id" id="id" type="hidden" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" asp-route-id="@Model.IdCarpeta">Back to List</a>
+    </form>
+</div>

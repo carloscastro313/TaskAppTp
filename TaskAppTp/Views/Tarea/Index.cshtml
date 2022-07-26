@@ -1,0 +1,47 @@
+﻿@model IEnumerable<TaskAppTp.Models.Tarea>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Crear" asp-controller="Tarea" asp-route-id="@ViewContext.RouteData.Values["id"]">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Nombre
+            </th>
+            <th>
+                Estado
+            </th>
+            <th>
+                Acciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td class="text-center">
+                @item.Nombre
+            </td>
+            <td>
+                <form asp-action="Estado" method="post" class="d-flex justify-content-center">
+                    <input name="id" value="@item.Id" type="hidden">
+                    <button type="submit" class="w-75 btn @(item.Completo? "btn-success":"btn-danger")">@(item.Completo?"Terminado":"Pendiente")</button>
+                </form>
+            </td>
+            <td class="d-flex justify-content-center gap-3">
+                <a class="btn btn-success" asp-action="Detalle" asp-controller="Tarea" asp-route-id="@item.Id">Ver detalle</a>
+                <a class="btn btn-warning" asp-action="Modificar" asp-controller="Tarea" asp-route-id="@item.Id">Modificar</a>
+                <a class="btn btn-danger" asp-action="Eliminar" asp-controller="Tarea" asp-route-id="@item.Id">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
