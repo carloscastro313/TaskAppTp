@@ -1,47 +1,207 @@
-﻿@model IEnumerable<TaskAppTp.Models.Tarea>
+﻿@using TaskAppTp.Helpers
+@model IEnumerable<TaskAppTp.Models.Tarea>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Crear" asp-controller="Tarea" asp-route-id="@ViewContext.RouteData.Values["id"]">Create New</a>
-</p>
-<table class="table table-bordered">
+<div class="d-flex flex-column gap-3 mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Lista de tareas</h1>
+        <a asp-action="Index" asp-controller="Carpeta" class="btn btn-success">Volver a la lista de carpetas</a>
+    </div>
+    <p>
+        <a asp-action="Crear" asp-controller="Tarea" asp-route-id="@ViewContext.RouteData.Values["id"]" class="btn btn-primary w-100">Crear nueva tarea</a>
+    </p>
+</div>
+<hr/>
+<div class="d-flex justify-content-between">
+    <h3>
+        Tareas pendientes
+    </h3>
+    <form asp-action="index" asp-route-id="@ViewContext.RouteData.Values["id"]" method="get" class="d-flex gap-2">
+        <select name="prioridad" class="form-control">
+            <option value="-1" selected="@(-1 == ViewBag.prioridad)">Todos</option>
+            @foreach (var item in System.Enum.GetValues(typeof(ePrioridad)))
+            {
+                <option value="@((int)item)" selected="@((int)item == ViewBag.prioridad)">@item</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-funnel"></i></button>
+    </form>
+</div>
+<table class="table text-center">
     <thead>
         <tr>
-            <th>
+            <th style="width: 15%">
+                Prioridad
+            </th>
+            <th style="width: 20%">
                 Nombre
             </th>
-            <th>
+            <th style="width: 20%">
                 Estado
             </th>
             <th>
-                Acciones
+                
             </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
+        @if (item.Completo != eEstado.Pendiente)
+        {
+            continue;
+        }
         <tr>
+            <td class="text-center">
+               <span class="badge @(TareasHelper.GetBgPrioridad(@item.Prioridad))">@item.Prioridad.ToString()</span>
+            </td>
             <td class="text-center">
                 @item.Nombre
             </td>
             <td>
-                <form asp-action="Estado" method="post" class="d-flex justify-content-center">
-                    <input name="id" value="@item.Id" type="hidden">
-                    <button type="submit" class="w-75 btn @(item.Completo? "btn-success":"btn-danger")">@(item.Completo?"Terminado":"Pendiente")</button>
-                </form>
+                <div class="dropdown">
+                  <button class="btn @(TareasHelper.GetBtnColorEstado(item.Completo)) dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    @item.Completo.ToString()
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        @foreach (var estados in System.Enum.GetValues(typeof(eEstado)))
+                            {
+                                if (item.Completo == (eEstado)estados) continue;
+
+                                <li><a class="dropdown-item" asp-action="CambiarEstado" asp-route-id="@item.Id" asp-route-estado="@((int)estados)" >@estados</a></li>
+                        }
+                  </ul>
+                </div>
             </td>
             <td class="d-flex justify-content-center gap-3">
-                <a class="btn btn-success" asp-action="Detalle" asp-controller="Tarea" asp-route-id="@item.Id">Ver detalle</a>
-                <a class="btn btn-warning" asp-action="Modificar" asp-controller="Tarea" asp-route-id="@item.Id">Modificar</a>
-                <a class="btn btn-danger" asp-action="Eliminar" asp-controller="Tarea" asp-route-id="@item.Id">Eliminar</a>
+                <a class="btn btn-success rounded-circle" asp-action="Detalle" asp-controller="Tarea" asp-route-id="@item.Id"><i  class="bi bi-card-list"></i></a>
+                <a class="btn btn-warning rounded-circle" asp-action="Modificar" asp-controller="Tarea" asp-route-id="@item.Id"><i  class="bi bi-pencil"></i></a>
+                <a class="btn btn-danger rounded-circle" asp-action="Eliminar" asp-controller="Tarea" asp-route-id="@item.Id"><i  class="bi bi-trash"></i></a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<div class="mt-5">
+    <h3>
+        Tareas en proceso
+    </h3>
+    <table class="table text-center">
+        <thead>
+            <tr>
+                <th style="width: 15%">
+                    Prioridad
+                </th>
+                <th style="width: 20%">
+                    Nombre
+                </th>
+                <th style="width: 20%">
+                    Estado
+                </th>
+                <th>
+                
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            @if (item.Completo != eEstado.Realizando)
+            {
+                continue;
+            }
+            <tr>
+                <td class="text-center">
+                   <span class="badge @(TareasHelper.GetBgPrioridad(@item.Prioridad))">@item.Prioridad.ToString()</span>
+                </td>
+                <td class="text-center">
+                    @item.Nombre
+                </td>
+                <td>
+                    <div class="dropdown">
+                      <button class="btn @(TareasHelper.GetBtnColorEstado(item.Completo)) dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        @item.Completo.ToString()
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            @foreach (var estados in System.Enum.GetValues(typeof(eEstado)))
+                                {
+                                    if (item.Completo == (eEstado)estados) continue;
+
+                                    <li><a class="dropdown-item" asp-action="CambiarEstado" asp-route-id="@item.Id" asp-route-estado="@((int)estados)" >@estados</a></li>
+                            }
+                      </ul>
+                    </div>
+                </td>
+                <td class="d-flex justify-content-center gap-3">
+                    <a class="btn btn-success rounded-circle" asp-action="Detalle" asp-controller="Tarea" asp-route-id="@item.Id"><i  class="bi bi-card-list"></i></a>
+                    <a class="btn btn-warning rounded-circle" asp-action="Modificar" asp-controller="Tarea" asp-route-id="@item.Id"><i  class="bi bi-pencil"></i></a>
+                    <a class="btn btn-danger rounded-circle" asp-action="Eliminar" asp-controller="Tarea" asp-route-id="@item.Id"><i  class="bi bi-trash"></i></a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-5">
+    <h3>
+        Tareas Terminadas
+    </h3>
+    <table class="table text-center">
+        <thead>
+            <tr>
+                <th style="width: 15%">
+                    Prioridad
+                </th>
+                <th style="width: 20%">
+                    Nombre
+                </th>
+                <th style="width: 20%">
+                    Estado
+                </th>
+                <th>
+                
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            @if (item.Completo != eEstado.Terminado)
+            {
+                continue;
+            }
+            <tr>
+                <td class="text-center">
+                   <span class="badge @(TareasHelper.GetBgPrioridad(@item.Prioridad))">@item.Prioridad.ToString()</span>
+                </td>
+                <td class="text-center">
+                    @item.Nombre
+                </td>
+                <td>
+                    <div class="dropdown">
+                      <button class="btn @(TareasHelper.GetBtnColorEstado(item.Completo)) dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        @item.Completo.ToString()
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            @foreach (var estados in System.Enum.GetValues(typeof(eEstado)))
+                                {
+                                    if (item.Completo == (eEstado)estados) continue;
+
+                                    <li><a class="dropdown-item" asp-action="CambiarEstado" asp-route-id="@item.Id" asp-route-estado="@((int)estados)" >@estados</a></li>
+                            }
+                      </ul>
+                    </div>
+                </td>
+                <td class="d-flex justify-content-center gap-3">
+                    <a class="btn btn-success rounded-circle" asp-action="Detalle" asp-controller="Tarea" asp-route-id="@item.Id"><i  class="bi bi-card-list"></i></a>
+                    <a class="btn btn-warning rounded-circle" asp-action="Modificar" asp-controller="Tarea" asp-route-id="@item.Id"><i  class="bi bi-pencil"></i></a>
+                    <a class="btn btn-danger rounded-circle" asp-action="Eliminar" asp-controller="Tarea" asp-route-id="@item.Id"><i  class="bi bi-trash"></i></a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>

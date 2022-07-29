@@ -1,15 +1,17 @@
 ﻿@model IEnumerable<TaskAppTp.Models.Carpeta>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Carpetas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Crear">Crear nueva carpeta de tareas</a>
-</p>
+<div class="d-flex flex-column gap-3 mb-4">
+    <h1>Lista de carpetas</h1>
+    <p>
+        <a asp-action="Crear" class="btn btn-primary w-100">Crear nueva carpeta de tareas</a>
+    </p>
+</div>
+<hr/>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -18,6 +20,12 @@
             </th>
             <th>
                 Cantidad de tareas
+            </th>
+            <th>
+                Tareas terminadas
+            </th>
+            <th>
+                Tareas pendientes
             </th>
             <th>
                 Acciones
@@ -32,6 +40,12 @@
             </td>
             <td>
                 @item.CantidadTareas
+            </td>
+            <td>
+                @item.Terminadas
+            </td>
+            <td>
+                @item.Pendiente
             </td>
             <td class="text-center">
                 <a class="btn btn-success" asp-action="Index" asp-controller="Tarea" asp-route-id="@item.Id">Ver tareas</a>

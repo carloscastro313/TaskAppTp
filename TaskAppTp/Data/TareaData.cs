@@ -21,8 +21,9 @@ namespace TaskAppTp.Data
             {
                 Id = row.Field<int>("Id"),
                 Nombre = row.Field<string>("Nombre"),
-                Completo = row.Field<Boolean>("Completo"),
+                Completo = row.Field<eEstado>("Completo"),
                 Descripcion = row.Field<string>("Descripcion"),
+                Prioridad = row.Field<ePrioridad>("Prioridad"),
                 IdCarpeta = row.Field<int>("IdCarpeta")
             }).ToList();
         }
@@ -49,10 +50,34 @@ namespace TaskAppTp.Data
             {
                 Id = row.Field<int>("Id"),
                 Nombre = row.Field<string>("Nombre"),
-                Completo = row.Field<Boolean>("Completo"),
+                Completo = row.Field<eEstado>("Completo"),
                 Descripcion = row.Field<string>("Descripcion"),
+                Prioridad = row.Field<ePrioridad>("Prioridad"),
                 IdCarpeta = row.Field<int>("IdCarpeta")
             };
+        }
+
+        public List<Tarea> GetTareasPorPrioridad(int id, int prioridad)
+        {
+            SqlCommand cmd = new SqlCommand("spGetTareasPorPrioridad");
+
+            cmd.Parameters.AddWithValue("@IdCarpeta", id);
+            cmd.Parameters.AddWithValue("@Prioridad", prioridad);
+
+            DbConnection dbConnection = new DbConnection();
+
+
+            DataTable dtTareas = dbConnection.ExcecuteReaderProcedure(cmd);
+
+            return dtTareas.AsEnumerable().Select(row => new Tarea
+            {
+                Id = row.Field<int>("Id"),
+                Nombre = row.Field<string>("Nombre"),
+                Completo = row.Field<eEstado>("Completo"),
+                Descripcion = row.Field<string>("Descripcion"),
+                Prioridad = row.Field<ePrioridad>("Prioridad"),
+                IdCarpeta = row.Field<int>("IdCarpeta")
+            }).ToList();
         }
 
         public bool CreateTarea(Tarea tarea)
@@ -61,6 +86,7 @@ namespace TaskAppTp.Data
 
             cmd.Parameters.AddWithValue("@Nombre", tarea.Nombre);
             cmd.Parameters.AddWithValue("@Descripcion", tarea.Descripcion);
+            cmd.Parameters.AddWithValue("@Prioridad", tarea.Prioridad);
             cmd.Parameters.AddWithValue("@IdCarpeta", tarea.IdCarpeta);
 
             DbConnection dbConnection = new DbConnection();
@@ -75,6 +101,7 @@ namespace TaskAppTp.Data
             cmd.Parameters.AddWithValue("@Id", tarea.Id);
             cmd.Parameters.AddWithValue("@Nombre", tarea.Nombre);
             cmd.Parameters.AddWithValue("@Descripcion", tarea.Descripcion);
+            cmd.Parameters.AddWithValue("@Prioridad", tarea.Prioridad);
             cmd.Parameters.AddWithValue("@Completo", tarea.Completo);
 
             DbConnection dbConnection = new DbConnection();
@@ -93,6 +120,12 @@ namespace TaskAppTp.Data
             return dbConnection.ExcecuteProcedure(cmd);
         }
 
+        public static bool TareaExiste(int id)
+        {
+            TareaData tareaData = new TareaData();
+            Tarea existe = tareaData.GetTarea(id);
 
+            return existe != null;
+        }
     }
 }

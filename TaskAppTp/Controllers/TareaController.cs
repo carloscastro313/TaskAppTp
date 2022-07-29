@@ -13,15 +13,28 @@ namespace TaskAppTp.Controllers
             _tareaData = new TareaData();
         }
 
-        public IActionResult Index(int id)
+        public IActionResult Index(int id, int prioridad = -1)
         {
-            List<Tarea> tareas = _tareaData.GetTareas(id);
+            if (!CarpetaData.CarpetaExiste(id))
+            {
+                return RedirectToAction("Index", "Carpeta");
+            }
+
+
+            List<Tarea> tareas = prioridad == -1 ? _tareaData.GetTareas(id) : _tareaData.GetTareasPorPrioridad(id, prioridad);
+
+            ViewBag.prioridad = prioridad;
 
             return View(tareas);
         }
 
         public IActionResult Crear(int id)
         {
+            if (!CarpetaData.CarpetaExiste(id))
+            {
+                return RedirectToAction("Index", "Carpeta");
+            }
+
             return View();
         }
 
@@ -38,18 +51,18 @@ namespace TaskAppTp.Controllers
             return RedirectToAction("Index", "Tarea", new { id = tarea.IdCarpeta });
         }
 
-        [HttpPost]
-        public IActionResult Estado(int id)
+        public IActionResult CambiarEstado(int id, int estado)
         {
             Tarea tarea = _tareaData.GetTarea(id);
 
-            if (tarea != null)
+            if (tarea == null || !System.Enum.IsDefined(typeof(eEstado), estado))
             {
-                tarea.Completo = !tarea.Completo;
-                _tareaData.UpdateTarea(tarea);
+                return RedirectToAction("Index", "Carpeta");
             }
 
-            return RedirectToAction("Index", "Tarea", new { id = tarea.IdCarpeta });
+            tarea.Completo = (eEstado)estado;
+
+            return Modificar(tarea);
         }
 
         public IActionResult Modificar(int id)
@@ -115,5 +128,6 @@ namespace TaskAppTp.Controllers
 
             return View(tarea);
         }
+
     }
 }

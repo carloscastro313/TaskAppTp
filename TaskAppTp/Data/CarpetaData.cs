@@ -19,7 +19,9 @@ namespace TaskAppTp.Data
             {
                 Id = row.Field<int>("Id"),
                 Nombre = row.Field<string>("Nombre"),
-                CantidadTareas = row.Field<int>("CantidadTareas")
+                CantidadTareas = row.Field<int>("CantidadTareas"),
+                Terminadas = row.Field<int>("Terminado"),
+                Pendiente = row.Field<int>("Pendiente")
             }).ToList();
         }
 
@@ -80,6 +82,14 @@ namespace TaskAppTp.Data
             DbConnection dbConnection = new DbConnection();
 
             return dbConnection.ExcecuteProcedure(cmd);
+        }
+
+        public static bool CarpetaExiste(int id)
+        {
+            CarpetaData carpetaData = new CarpetaData();
+            Carpeta existe = carpetaData.GetCarpeta(id);
+
+            return existe != null;
         }
     }
 }
