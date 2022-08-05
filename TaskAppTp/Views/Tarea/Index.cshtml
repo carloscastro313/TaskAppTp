@@ -8,7 +8,7 @@
 
 <div class="d-flex flex-column gap-3 mb-4">
     <div class="d-flex justify-content-between align-items-center">
-        <h1>Lista de tareas</h1>
+        <h1>Lista de tareas: @ViewBag.nombreCarpeta</h1>
         <a asp-action="Index" asp-controller="Carpeta" class="btn btn-success">Volver a la lista de carpetas</a>
     </div>
     <p>
@@ -21,6 +21,7 @@
         Tareas pendientes
     </h3>
     <form asp-action="index" asp-route-id="@ViewContext.RouteData.Values["id"]" method="get" class="d-flex gap-2">
+        <input class="form-control" name="nombre" placeholder="Nombre" value="@ViewBag.nombre" />
         <select name="prioridad" class="form-control">
             <option value="-1" selected="@(-1 == ViewBag.prioridad)">Todos</option>
             @foreach (var item in System.Enum.GetValues(typeof(ePrioridad)))
@@ -28,7 +29,8 @@
                 <option value="@((int)item)" selected="@((int)item == ViewBag.prioridad)">@item</option>
             }
         </select>
-        <button type="submit" class="btn btn-primary"><i class="bi bi-funnel"></i></button>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Tarea" asp-route-id="@ViewContext.RouteData.Values["id"]"><i class="bi bi-arrow-clockwise"></i></a>
     </form>
 </div>
 <table class="table text-center">

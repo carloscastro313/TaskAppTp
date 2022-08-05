@@ -7,9 +7,12 @@ namespace TaskAppTp.Data
     public class CarpetaData
     {
 
-        public List<Carpeta> GetCarpetas()
+        public List<Carpeta> GetCarpetas(string? nombre = null)
         {
-            SqlCommand cmd = new SqlCommand("spGetAllCarpetas");
+            SqlCommand cmd = new SqlCommand("spGetCarpetas");
+
+            if (!string.IsNullOrEmpty(nombre))
+                cmd.Parameters.AddWithValue("@nombre", nombre);
 
             DbConnection dbConnection = new DbConnection();
 
@@ -84,12 +87,17 @@ namespace TaskAppTp.Data
             return dbConnection.ExcecuteProcedure(cmd);
         }
 
-        public static bool CarpetaExiste(int id)
+        public static bool CarpetaExiste(int id, out Carpeta carpeta)
         {
             CarpetaData carpetaData = new CarpetaData();
-            Carpeta existe = carpetaData.GetCarpeta(id);
+            carpeta = carpetaData.GetCarpeta(id);
 
-            return existe != null;
+            return carpeta != null;
+        }
+
+        public static bool CarpetaExiste(int id)
+        {
+            return CarpetaExiste(id, out _);
         }
     }
 }

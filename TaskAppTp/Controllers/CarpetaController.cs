@@ -13,9 +13,11 @@ namespace TaskAppTp.Controllers
             _carpetaData = new CarpetaData();
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? nombre = null)
         {
-            List<Carpeta> carpetas = _carpetaData.GetCarpetas();
+            List<Carpeta> carpetas = _carpetaData.GetCarpetas(nombre);
+            ViewBag.nombre = string.IsNullOrEmpty(nombre) ? string.Empty : nombre;
+
             return View(carpetas);
         }
 

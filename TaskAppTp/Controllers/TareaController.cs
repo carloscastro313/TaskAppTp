@@ -13,18 +13,19 @@ namespace TaskAppTp.Controllers
             _tareaData = new TareaData();
         }
 
-        public IActionResult Index(int id, int prioridad = -1)
+        public IActionResult Index(int id, int prioridad = -1, string? nombre = null)
         {
-            if (!CarpetaData.CarpetaExiste(id))
+            Carpeta carpeta;
+            if (!CarpetaData.CarpetaExiste(id, out carpeta))
             {
                 return RedirectToAction("Index", "Carpeta");
             }
 
 
-            List<Tarea> tareas = prioridad == -1 ? _tareaData.GetTareas(id) : _tareaData.GetTareasPorPrioridad(id, prioridad);
-
+            List<Tarea> tareas = _tareaData.GetTareas(id, prioridad, nombre);
+            ViewBag.nombre = string.IsNullOrEmpty(nombre) ? string.Empty : nombre;
             ViewBag.prioridad = prioridad;
-
+            ViewBag.nombreCarpeta = carpeta.Nombre;
             return View(tareas);
         }
 
@@ -46,6 +47,8 @@ namespace TaskAppTp.Controllers
                 return View();
             }
 
+            tarea.FechaCreado = DateTime.Now;
+
             _tareaData.CreateTarea(tarea);
 
             return RedirectToAction("Index", "Tarea", new { id = tarea.IdCarpeta });
@@ -61,6 +64,7 @@ namespace TaskAppTp.Controllers
             }
 
             tarea.Completo = (eEstado)estado;
+            tarea.FechaCambioEstado = DateTime.Now;
 
             return Modificar(tarea);
         }

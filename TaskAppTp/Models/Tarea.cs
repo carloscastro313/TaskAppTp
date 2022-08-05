@@ -14,5 +14,7 @@ namespace TaskAppTp.Models
         public ePrioridad Prioridad { get; set; }
         public eEstado Completo { get; set; }
         public int IdCarpeta { get; set; }
+        public DateTime FechaCreado { get; set; }
+        public DateTime? FechaCambioEstado { get; set; }
     }
 }

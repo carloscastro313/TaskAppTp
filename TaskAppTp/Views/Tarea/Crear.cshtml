@@ -30,7 +30,7 @@
                     @foreach (ePrioridad item in System.Enum.GetValues(typeof(ePrioridad)))
                     {
                         <div class="form-check">
-                            <input type="radio" asp-for="Prioridad" value="@item" class="form-check-input" />
+                            <input type="radio" asp-for="Prioridad" value="@item" class="form-check-input" checked="@(item == ePrioridad.Baja)"/>
                             <label asp-for="Prioridad" class="badge @TareasHelper.GetBgPrioridad(item) form-check-label">@item</label>
                         </div>
                     }

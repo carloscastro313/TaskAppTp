@@ -12,6 +12,13 @@
     </p>
 </div>
 <hr/>
+<div class="d-flex justify-content-end mb-4">
+    <form asp-action="index" asp-controller="Carpeta" method="get" class="d-flex gap-2">
+        <input class="form-control" name="nombre" placeholder="Nombre" value="@ViewBag.nombre" />
+        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Carpeta"><i class="bi bi-arrow-clockwise"></i></a>
+    </form>
+</div>
 <table class="table table-bordered">
     <thead>
         <tr>
