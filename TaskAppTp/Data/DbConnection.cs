@@ -71,7 +71,6 @@ namespace TaskAppTp.Data
             }
             catch (Exception)
             {
-                throw;
             }
 
             return dt;

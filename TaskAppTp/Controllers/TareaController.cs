@@ -7,10 +7,12 @@ namespace TaskAppTp.Controllers
     public class TareaController : Controller
     {
         private readonly TareaData _tareaData;
+        private readonly ComentarioData _comentarioData;
 
         public TareaController()
         {
             _tareaData = new TareaData();
+            _comentarioData = new ComentarioData();
         }
 
         public IActionResult Index(int id, int prioridad = -1, string? nombre = null)
@@ -129,6 +131,10 @@ namespace TaskAppTp.Controllers
             {
                 return RedirectToAction("Index", "Carpeta");
             }
+
+            List<Comentario> comentarios = _comentarioData.GetComentarios(id);
+
+            ViewBag.comentarios = comentarios;
 
             return View(tarea);
         }

@@ -26,6 +26,24 @@
         <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.Nombre)
         </dd>
+        <dt class = "col-sm-4">
+            Cantidad de tareas
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.CantidadTareas)
+        </dd>
+        <dt class = "col-sm-4">
+            Cantidad de tareas terminadas
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Terminadas)
+        </dd>
+        <dt class = "col-sm-4">
+            Cantidad de tareas pendientes
+        </dt>
+        <dd class = "col-sm-8">
+            @Html.DisplayFor(model => model.Pendiente)
+        </dd>
     </dl>
     
     <form asp-action="EliminarCarpeta" method="post">

@@ -8,8 +8,8 @@
 
 <h1 class="text-center">Detalle</h1>
 <hr />
-<div class="d-flex flex-column align-items-center gap-3 mt-4">
-    <dl class="row w-50">
+<div class="d-flex flex-column m-auto px-5 gap-3">
+    <dl class="row my-auto">
         <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.Id)
         </dt>
@@ -59,7 +59,35 @@
             </dd>
         }
     </dl>
-    <div>
-        <a asp-action="Index" asp-controller="Tarea" asp-route-id="@Model.IdCarpeta" class="btn btn-success">Volver a la lista de tareas</a>
+    <div class="d-flex flex-column gap-3">
+        <h5>Comentarios</h5>
+        <div class="overflow-auto bg-white" style="height: 400px">
+            <ul class="list-group" style="word-break:break-all">
+                @foreach (Comentario item in ViewBag.comentarios)
+                {
+                    <li class="list-group-item flex-column">
+                        <p class="mb-3">
+                            @item.Texto
+                        </p>
+                        <div class="d-flex flex-row justify-content-between">
+                            <small>@item.FechaCreada</small>
+                            <form asp-action="eliminar" asp-controller="Comentario" method="post">
+                                <input type="hidden" value="@item.Id" name="id"/>
+                                <input type="hidden" value="@Model.Id" name="idTarea"/>
+                                <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <form class="d-flex gap-3" asp-action="crear" asp-controller="Comentario" method="post">
+            <input type="text" placeholder="Dejar comentario" class="form-control" name="Texto" required minlength="10" maxlength="150" />
+            <input type="hidden" value="@Model.Id" name="IdTarea" />
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
     </div>
+</div>
+<div class="d-flex justify-content-center mt-5">
+    <a asp-action="Index" asp-controller="Tarea" asp-route-id="@Model.IdCarpeta" class="btn btn-success">Volver a la lista de tareas</a>
 </div>

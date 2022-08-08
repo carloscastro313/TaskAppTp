@@ -49,7 +49,10 @@ namespace TaskAppTp.Data
             return new Carpeta
             {
                 Id = (int)row["Id"],
-                Nombre = (string)row["Nombre"]
+                Nombre = (string)row["Nombre"],
+                CantidadTareas = row.Field<int>("CantidadTareas"),
+                Terminadas = row.Field<int>("Terminado"),
+                Pendiente = row.Field<int>("Pendiente")
             };
         }
 
